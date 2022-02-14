@@ -257,9 +257,8 @@ Then go to the job and type Build
 
 Go to the console output:
 
-Console Output;
-
-Started by user Md Danish
+Console Output
+Started by GitHub push by Md-Danish-eng
 Running as SYSTEM
 Building in workspace /var/lib/jenkins/workspace/Dockerize
 [WS-CLEANUP] Deleting project workspace...
@@ -278,12 +277,12 @@ Fetching upstream changes from https://github.com/Md-Danish-eng/dockerize.git
  > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
 Avoid second fetch
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-Checking out Revision 6f2f0178d7cd4b5111bb3c47df7a503e55fcdb72 (refs/remotes/origin/main)
+Checking out Revision 253b92e8cd781e456cf2d808ec705d687f2e9d27 (refs/remotes/origin/main)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 6f2f0178d7cd4b5111bb3c47df7a503e55fcdb72 # timeout=10
-Commit message: "Update server.js"
- > git rev-list --no-walk 6f2f0178d7cd4b5111bb3c47df7a503e55fcdb72 # timeout=10
-[Dockerize] $ /bin/sh -xe /tmp/jenkins4796172036923287573.sh
+ > git checkout -f 253b92e8cd781e456cf2d808ec705d687f2e9d27 # timeout=10
+Commit message: "Update README.md"
+ > git rev-list --no-walk 2939fc90794387901f6e0c323ec227ce5882bacf # timeout=10
+[Dockerize] $ /bin/sh -xe /tmp/jenkins8143916342842779262.sh
 + pwd
 /var/lib/jenkins/workspace/Dockerize
 + ls
@@ -294,7 +293,7 @@ package-lock.json
 package.json
 server.js
 + sudo docker build . -t mddanish123/node-web-app
-Sending build context to Docker daemon    702kB
+Sending build context to Docker daemon  715.3kB
 
 Step 1/7 : FROM node:16
  ---> 1e151315aa91
@@ -308,22 +307,22 @@ Step 4/7 : RUN npm install
  ---> Using cache
  ---> faf0e76caffa
 Step 5/7 : COPY . .
- ---> 58799fda0687
+ ---> e4f89b820b9d
 Step 6/7 : EXPOSE 9080
- ---> Running in 1fecaf422f09
-Removing intermediate container 1fecaf422f09
- ---> e90b545ad744
+ ---> Running in 3643e5001782
+Removing intermediate container 3643e5001782
+ ---> f38658cb65e4
 Step 7/7 : CMD [ "node", "server.js" ]
- ---> Running in 8ccd9bc700a1
-Removing intermediate container 8ccd9bc700a1
- ---> bf36a1ae658d
-Successfully built bf36a1ae658d
+ ---> Running in 6a185a90fa73
+Removing intermediate container 6a185a90fa73
+ ---> 1fa3427ca665
+Successfully built 1fa3427ca665
 Successfully tagged mddanish123/node-web-app:latest
-+ sudo docker run -p 49167:9080 -d mddanish123/node-web-app
-1d7441d4a41abde9ec0eb2daa542d061a0fd9020760a7e39b140f406aafd2693
++ sudo docker rm --force nodeapp
+nodeapp
++ sudo docker run --name nodeapp -p 49167:9080 -d mddanish123/node-web-app
+de825da9862514ab9e5ad1bf29695dacebecd86e2665b7d49a13dd82bf47cac1
 Finished: SUCCESS
-
-Now go to the browser and check by hit public-ip:49167
 
 Hello world i am nodejs
 
