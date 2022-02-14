@@ -209,7 +209,7 @@ Give your token a descriptive name.
 
 nodejs-pipeline
 
-#got to Source Code Management
+#go to Source Code Management
 
 choose git here
 
