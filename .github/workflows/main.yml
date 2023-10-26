@@ -36,7 +36,7 @@ jobs:
           USER_NAME: ${{ secrets.EC2_USER }}
         run: |
           if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-            scp -i private_key -o StrictHostKeyChecking=no /home/ubuntu/github-action/test/test.sh ${USER_NAME}@${HOSTNAME}:/tmp/test.sh
+            scp -i private_key -o StrictHostKeyChecking=no /home/ubuntu/Deploy-sample-nodejs-app-on-ec2-instance-and-automate-through-Jenkins/test.sh ${USER_NAME}@${HOSTNAME}:/tmp/test.sh
             ssh -i private_key $USER_NAME@$HOSTNAME "cd /tmp && chmod +x test.sh && ./test.sh"
           elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
             scp -i private_key -o StrictHostKeyChecking=no /path/to/script_location2/script2.sh ${USER_NAME}@${HOSTNAME}:/tmp/script2.sh
