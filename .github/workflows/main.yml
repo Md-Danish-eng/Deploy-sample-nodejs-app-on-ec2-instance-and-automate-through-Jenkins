@@ -35,7 +35,7 @@ jobs:
           HOSTNAME: ${{ secrets.EC2_PUBLIC_IP }}
           USER_NAME: ${{ secrets.EC2_USER }}
         run: |
-          if [ "$GITHUB_REF" = "main" ]; then
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
             scp -i private_key -o StrictHostKeyChecking=no /home/ubuntu/github-action/test/test.sh ${USER_NAME}@${HOSTNAME}:/tmp/test.sh
             ssh -i private_key $USER_NAME@$HOSTNAME "cd /tmp && chmod +x test.sh && ./test.sh"
           elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
