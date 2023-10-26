@@ -27,7 +27,7 @@ jobs:
     - name: Run Branch-Specific Script
       run: |
         if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-          ssh -i ssh_key user@your-server "cd /path/to/script_location1 && ./script1.sh"
+          ssh -i ssh_key ubuntu@13.36.194.31 "cd /home/ubuntu/github-action/test && ./test.sh"
         elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
           ssh -i ssh_key user@your-server "cd /path/to/script_location2 && ./script2.sh"
         elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
