@@ -8,36 +8,33 @@ on:
       - feature2
 
 jobs:
-  run-script:
+  Deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up SSH agent
-      run: |
-        eval $(ssh-agent -s)
-        ssh-add <(echo "$SSH_PRIVATE_KEY")
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Build & Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.EC2_PUBLIC_IP }}
+          USER_NAME: ${{ secrets.EC2_USER }}
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-    - name: SSH into EC2 and deploy
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_PUBLIC_IP }}
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        EC2_USER: ${{ secrets.EC2_USER }}
-        EC2_PUBLIC_IP: ${{ secrets.EC2_PUBLIC_IP }}
-
-    - name: Run Branch-Specific Script
-      run: |
-        if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-          ssh -i ssh_key $EC2_USER@$EC2_PUBLIC_IP "cd /home/ubuntu/github-action/test && ./test.sh"
-        elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
-          ssh -i ssh_key user@your-server "cd /path/to/script_location2 && ./script2.sh"
-        elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
-          ssh -i ssh_key user@your-server "cd /path/to/script_location3 && ./script3.sh"
-        else
-          echo "No matching script found for this branch."
-        fi
+      - name: Run Branch-Specific Script
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            ssh -i ssh_key $EC2_USER@$EC2_PUBLIC_IP "cd /home/ubuntu/github-action/test && ./test.sh"
+          elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
+            ssh -i ssh_key user@your-server "cd /path/to/script_location2 && ./script2.sh"
+          elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
+            ssh -i ssh_key user@your-server "cd /path/to/script_location3 && ./script3.sh"
+          else
+            echo "No matching script found for this branch."
+          fi
