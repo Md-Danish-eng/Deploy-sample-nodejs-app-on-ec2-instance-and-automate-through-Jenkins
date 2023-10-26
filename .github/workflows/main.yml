@@ -30,11 +30,15 @@ jobs:
       - name: Run Branch-Specific Script
         run: |
           if [ "$GITHUB_REF" = "main" ]; then
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /home/ubuntu/github-action/test && ./test.sh"
+            scp -i private_key -o StrictHostKeyChecking=no $HOSTNAME:/home/ubuntu/github-action/test/test.sh /tmp/test.sh
+            ssh -i private_key $USER_NAME@$HOSTNAME "cd /home/ubuntu/github-action && chmod +x /tmp/test.sh && /tmp/test.sh"
           elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /path/to/script_location2 && ./script2.sh"
+            scp -i private_key -o StrictHostKeyChecking=no your-server:/path/to/script_location2/script2.sh /tmp/script2.sh
+            ssh -i private_key $USER_NAME@$HOSTNAME "cd /home/ubuntu/github-action && chmod +x /tmp/script2.sh && /tmp/script2.sh"
           elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /path/to/script_location3 && ./script3.sh"
+            scp -i private_key -o StrictHostKeyChecking=no your-server:/path/to/script_location3/script3.sh /tmp/script3.sh
+            ssh -i private_key $USER_NAME@$HOSTNAME "cd /home/ubuntu/github-action && chmod +x /tmp/script3.sh && /tmp/script3.sh"
           else
             echo "No matching script found for this branch."
           fi
+
