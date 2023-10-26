@@ -1,0 +1,37 @@
+name: Run Branch-Specific Script
+
+on:
+  push:
+    branches:
+      - main
+      - feature1
+      - feature2
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      run: |
+        echo "$SSH_PRIVATE_KEY" > ssh_key
+        chmod 600 ssh_key
+        ssh-keyscan your-server >> ~/.ssh/known_hosts
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        # Add your SSH private key as a secret in your repository
+
+    - name: Run Branch-Specific Script
+      run: |
+        if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+          ssh -i ssh_key ubuntu@13.36.194.31 "cd /home/ubuntu/github-action/test && ./test.sh"
+        elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
+          ssh -i ssh_key user@your-server "cd /path/to/script_location2 && ./script2.sh"
+        elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
+          ssh -i ssh_key user@your-server "cd /path/to/script_location3 && ./script3.sh"
+        else
+          echo "No matching script found for this branch."
+        fi
