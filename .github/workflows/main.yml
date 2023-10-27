@@ -1,23 +1,20 @@
-name: first-github-action
-
+name: Deployment Workflow
 on:
-  push:
-    branches:
-      - main  # Replace with the branch you want to trigger the workflow on
-
+  push: 
+    branches: [ main ]
 jobs:
-  write-to-console:
+  job_one: 
+    name: Deploy
     runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Make sure you have the SSH_PRIVATE_KEY secret set in your repository
-
-    - name: Run pwd
-      run: |
-        pwd
+    steps: 
+    - name: testing server ssh connection
+      uses: appleboy/ssh-action@master
+      with: 
+        host: 13.36.194.31
+        username: ubuntu
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          pwd
+        
+        
