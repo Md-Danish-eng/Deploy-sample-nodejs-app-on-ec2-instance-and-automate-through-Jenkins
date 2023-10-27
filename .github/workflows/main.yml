@@ -8,17 +8,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check Out Code
-        uses: actions/checkout@v2
+    - name: Check out code
+      uses: actions/checkout@v2
 
-      - name: SSH into EC2 and Run Script
-        uses: actions/checkout@v2
-        with:
-          host: ${{ secrets.EC2_PUBLIC_IP }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Commands to SSH into the EC2 instance and run your script
-            ssh -o StrictHostKeyChecking=no $username@$host "cd /home/ubuntu/github-action/test && pwd"
+    - name: SSH into server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_PUBLIC_IP }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22  # Adjust the port if needed
+        script: |
+          # Your SSH commands to execute on the server
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} "pwd"
