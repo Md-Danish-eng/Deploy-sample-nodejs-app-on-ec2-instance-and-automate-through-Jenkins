@@ -1,5 +1,5 @@
 #!/bin/bash
-source_dir="/home/ubuntu/test"
+source_dir="/home/ubuntu/github-action-test"
 cd $source_dir
 git clone https://github.com/Md-Danish-eng/Deploy-sample-nodejs-app-on-ec2-instance-and-automate-through-Jenkins.git github-action
 cd github-action
