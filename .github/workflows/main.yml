@@ -16,4 +16,4 @@ jobs:
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Make sure you have the SSH_PRIVATE_KEY secret set in your repository
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Make sure you have the SSH_PRIVATE_KEY secret set in your repository
