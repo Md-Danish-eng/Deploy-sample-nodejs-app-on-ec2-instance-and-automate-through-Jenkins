@@ -21,4 +21,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Commands to SSH into the EC2 instance and run your script
-            ssh -o StrictHostKeyChecking=no $username@$host "cd /home/ubuntu/github-action/test && pwd && ./test.sh"
+            ssh -o StrictHostKeyChecking=no $username@$host "cd /home/ubuntu/github-action/test && pwd"
