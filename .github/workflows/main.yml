@@ -16,6 +16,6 @@ jobs:
         port: 22
         script: |
           cd /home/ubuntu/github-action-test
-          bash test.sh
+          bash md.sh
         
         
