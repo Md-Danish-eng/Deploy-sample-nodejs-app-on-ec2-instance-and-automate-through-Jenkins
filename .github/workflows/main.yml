@@ -1,49 +1,24 @@
-name: Run Branch-Specific Script
+name: EC2 Deployment
 
 on:
   push:
     branches:
       - main
-      - feature1
-      - feature2
 
 jobs:
-  Deploy:
-    name: Deploy to EC2
+  deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
+      - name: Check Out Code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          echo "$PRIVATE_KEY" > private_key
-          chmod 600 private_key
-
-      - name: SSH into EC2
-        env:
-          HOSTNAME: ${{ secrets.EC2_PUBLIC_IP }}
-          USER_NAME: ${{ secrets.EC2_USER }}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
-
-      - name: Run Branch-Specific Script
-        env:
-          HOSTNAME: ${{ secrets.EC2_PUBLIC_IP }}
-          USER_NAME: ${{ secrets.EC2_USER }}
-        run: |
-          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-            scp -i private_key -o StrictHostKeyChecking=no /home/ubuntu/Deploy-sample-nodejs-app-on-ec2-instance-and-automate-through-Jenkins/test.sh ${USER_NAME}@${HOSTNAME}:/tmp/test.sh
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /tmp && chmod +x test.sh && ./test.sh"
-          elif [ "$GITHUB_REF" = "refs/heads/feature1" ]; then
-            scp -i private_key -o StrictHostKeyChecking=no /path/to/script_location2/script2.sh ${USER_NAME}@${HOSTNAME}:/tmp/script2.sh
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /tmp && chmod +x script2.sh && ./script2.sh"
-          elif [ "$GITHUB_REF" = "refs/heads/feature2" ]; then
-            scp -i private_key -o StrictHostKeyChecking=no /path/to/script_location3/script3.sh ${USER_NAME}@${HOSTNAME}:/tmp/script3.sh
-            ssh -i private_key $USER_NAME@$HOSTNAME "cd /tmp && chmod +x script3.sh && ./script3.sh"
-          else
-            echo "No matching script found for this branch."
-          fi
+      - name: SSH into EC2 and Run Script
+        uses: appleboy/ssh-action@v0.3
+        with:
+          host: ${{ secrets.EC2_PUBLIC_IP }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Commands to SSH into the EC2 instance and run your script
+            ssh -o StrictHostKeyChecking=no $username@$host "cd /home/ubuntu/github-action/test && ./test.sh"
