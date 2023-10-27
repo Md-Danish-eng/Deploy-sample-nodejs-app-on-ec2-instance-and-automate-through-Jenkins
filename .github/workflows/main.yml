@@ -1,25 +1,19 @@
-name: Deploy to Server
+name: first-github-action
 
 on:
   push:
     branches:
-      - main
+      - main  # Replace with the branch you want to trigger the workflow on
 
 jobs:
-  deploy:
-    name: Deploy
+  write-to-console:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Adding Known Hosts
-        run: |
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          rsync -avz ./source/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:destination/
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Make sure you have the SSH_PRIVATE_KEY secret set in your repository
