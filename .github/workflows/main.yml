@@ -1,4 +1,4 @@
-name: EC2 Deployment
+name: Deploy to Server
 
 on:
   push:
@@ -7,16 +7,19 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
 
-    - name: SSH into server
-      uses: easingthemes/ssh-deploy@main
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: pwd
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Adding Known Hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          rsync -avz ./source/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:destination/
